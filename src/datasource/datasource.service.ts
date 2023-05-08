@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Airport } from 'src/airport/airport.entity';
+import { Flight } from 'src/flight/flight.entity';
 import { Passenger } from 'src/passenger/passenger.entity';
 import { Plane } from 'src/plane/plane.entity';
 
@@ -10,6 +11,7 @@ export class DatasourceService {
 private planes: Plane[] = [];
 private airports: Airport[] = [];
 private passengers: Passenger[] = [];
+private flights: Flight[] = [];
 
 getPlanes(): Plane[] {
 return this.planes;
@@ -21,6 +23,10 @@ getAirports():Airport[]{
 
 getPassengers():Passenger[]{
     return this.passengers;
+}
+
+getFlights():Flight[]{
+    return this.flights;
 }
 
 }
