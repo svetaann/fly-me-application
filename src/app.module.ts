@@ -8,6 +8,7 @@ import { TicketModule } from './ticket/ticket.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Airport } from './airport/airport.entity';
 import { Flight } from './flight/flight.entity';
+import { Plane } from './plane/plane.entity';
 
 @Module({
     imports: [PlaneModule, DatasourceModule, AirportModule, PassengerModule
@@ -20,7 +21,7 @@ import { Flight } from './flight/flight.entity';
             host: 'localhost',
             synchronize: false,
             logging: 'all',
-            entities: [Airport, Flight]
+            entities: [Airport, Flight, Plane]
         })],
     controllers: [],
     providers: [],

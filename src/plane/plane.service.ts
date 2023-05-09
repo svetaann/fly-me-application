@@ -1,47 +1,47 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { DatasourceService } from "src/datasource/datasource.service";
 import { Plane } from "./plane.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+
 
 @Injectable()
-
 export class PlaneService {
     constructor(
-        private readonly datasourceService: DatasourceService) {}
+        @InjectRepository(Plane)
+        private readonly planeRepository: Repository<Plane>) {}
 
-    create(plane: Plane) {
+    async create(plane: Plane): Promise<Plane> {
 
-        this.datasourceService.getPlanes().push(plane);
+        const newPlane = await this.planeRepository.create(plane);
+        newPlane.name = plane.name
+        newPlane.seats_amount = plane.seats_amount
+        await this.planeRepository.save(newPlane)
+        return plane
             
-        return plane;
-            
     }
 
-    findOne(id: number) {
+    findOne(id: number): Promise<Plane> {
 
-        return this.datasourceService
-        
-        .getPlanes()
-        
-        .find((plane) => plane.id === id);
+        return this.planeRepository.findOne({where:{id}});
         
     }
-    findAll(): Plane[] {
-        return this.datasourceService.getPlanes();
+
+    async findAll(): Promise<Plane[]> {
+        return await this.planeRepository.find();
     }
-    update(id: number, updatedPlane: Plane) {
-        const index = this.datasourceService
-          .getPlanes()
-          .findIndex((plane) => plane.id === id);
-        this.datasourceService.getPlanes()[index] = updatedPlane;
-        return this.datasourceService.getPlanes()[index];
+
+    async update(id: number, updatedPlane: Plane) {
+        const plane = await this.planeRepository.findOne({where:{id}});
+        plane.name = updatedPlane.name
+        plane.seats_amount = updatedPlane.seats_amount
+        await this.planeRepository.save(plane)
+        return plane
     }
+
     remove(id: number) {
-        const index = this.datasourceService
-          .getPlanes()
-          .findIndex((plane) => plane.id === id);
-        this.datasourceService.getPlanes().splice(index, 1);
-        return HttpStatus.OK;
-      }
+        this.planeRepository.delete({id})
+    }
     
     
     
