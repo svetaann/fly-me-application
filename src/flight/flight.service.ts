@@ -1,16 +1,25 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { DatasourceService } from "src/datasource/datasource.service";
 import { Flight } from "./flight.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
 
 export class FlightService {
     constructor(
-        private readonly datasourceService: DatasourceService) {}
+        @InjectRepository(Flight)
+        private readonly flightService: Repository<Flight>) {}
 
-    create(flight: Flight) {
+    async create(flight: Flight) {
 
-        this.datasourceService.getFlights().push(flight);
+        const newflight = await this.flightService.create(flight)
+        newflight.name = flight.name
+        newflight.start_time = flight.start_time
+        newflight.end_time = flight.end_time
+        newflight.from_airport = flight.from_airport
+        newflight.to_airport = flight.to_airport
+        await this.flightService.save(newflight)
             
         return flight;
             

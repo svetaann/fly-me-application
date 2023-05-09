@@ -3,7 +3,6 @@ import { DatasourceService } from "src/datasource/datasource.service";
 import { Ticket } from "./ticket.entity";
 
 @Injectable()
-
 export class TicketService {
     constructor(
         private readonly datasourceService: DatasourceService) {}

@@ -5,9 +5,22 @@ import { AirportModule } from './airport/airport.module';
 import { PassengerModule } from './passenger/passenger.module';
 import { FlightModule } from './flight/flight.module';
 import { TicketModule } from './ticket/ticket.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Airport } from './airport/airport.entity';
 
 @Module({
-    imports: [PlaneModule, DatasourceModule, AirportModule, PassengerModule, FlightModule, TicketModule],
+    imports: [PlaneModule, DatasourceModule, AirportModule, PassengerModule
+        , FlightModule, TicketModule, TypeOrmModule.forRoot({
+            type: 'postgres',
+            port: 5432,
+            database: 'flyme',
+            username: 'postgres',
+            password: '12203044',
+            host: 'localhost',
+            synchronize: false,
+            logging: 'all',
+            entities: [Airport]
+        })],
     controllers: [],
     providers: [],
 })
