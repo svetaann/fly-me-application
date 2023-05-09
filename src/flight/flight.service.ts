@@ -9,47 +9,44 @@ import { Repository } from "typeorm";
 export class FlightService {
     constructor(
         @InjectRepository(Flight)
-        private readonly flightService: Repository<Flight>) {}
+        private readonly flightRepository: Repository<Flight>) {}
 
-    async create(flight: Flight) {
+    async create(flight: Flight): Promise<Flight> {
 
-        const newflight = await this.flightService.create(flight)
+        const newflight = await this.flightRepository.create(flight)
         newflight.name = flight.name
         newflight.start_time = flight.start_time
         newflight.end_time = flight.end_time
         newflight.from_airport = flight.from_airport
         newflight.to_airport = flight.to_airport
-        await this.flightService.save(newflight)
-            
+        await this.flightRepository.save(newflight)
         return flight;
             
     }
 
-    findOne(id: number) {
+    findOne(id: number): Promise<Flight> {
 
-        return this.datasourceService
-        
-        .getFlights()
-        
-        .find((flight) => flight.id === id);
+        return this.flightRepository.findOne({where: {id}})
         
     }
-    findAll(): Flight[] {
-        return this.datasourceService.getFlights();
+
+    async findAll(): Promise<Flight[]> {
+        return await this.flightRepository.find();
     }
-    update(id: number, updatedFlight: Flight) {
-        const index = this.datasourceService
-          .getFlights()
-          .findIndex((flight) => flight.id === id);
-        this.datasourceService.getFlights()[index] = updatedFlight;
-        return this.datasourceService.getFlights()[index];
+
+    async update(id: number, updatedFlight: Flight) {
+        const flight = await this.flightRepository.findOne({where:{id}})
+        flight.name = updatedFlight.name
+        flight.from_airport = updatedFlight.from_airport
+        flight.to_airport = updatedFlight.to_airport
+        flight.start_time = updatedFlight.start_time
+        flight.end_time = updatedFlight.end_time
+        await this.flightRepository.save(flight)
+        return flight
     }
+
     remove(id: number) {
-        const index = this.datasourceService
-          .getFlights()
-          .findIndex((flight) => flight.id === id);
-        this.datasourceService.getFlights().splice(index, 1);
-        return HttpStatus.OK;
+        this.flightRepository.delete({id})
       }
     
     

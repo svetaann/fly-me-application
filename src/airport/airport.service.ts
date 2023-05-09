@@ -18,27 +18,18 @@ export class AirportService {
         airport2.iata = airport.iata;
         airport2.city = airport.city;
         await this.airportRepository.save(airport2);
-
-
-        //this.datasourceService.getAirports().push(airport);
-            
         return airport;
             
     }
 
     findOne(id: number): Promise<Airport> {
-        return this.airportRepository.findOne({
-            where: {id},
-
-        });
+        return this.airportRepository.findOne({where: {id}});
         
     }
     async findAll(): Promise<Airport[]> {
         return await this.airportRepository.find();
-        // const airports = await this.airportRepository.find();
-        // return airports;
-        //return this.datasourceService.getAirports();
     }
+
     async update(id: number, updatedAirport: Airport) {
         const airport = await this.airportRepository.findOne({where:{id}});
         airport.city = updatedAirport.city
@@ -46,22 +37,10 @@ export class AirportService {
         airport.name = updatedAirport.name
         await this.airportRepository.save(airport)
         return airport
-        // const index = this.datasourceService
-        //   .getAirports()
-        //   .findIndex((airport) => airport.id === id);
-        // this.datasourceService.getAirports()[index] = updatedAirport;
-        // return this.datasourceService.getAirports()[index];
     }
+
     remove(id: number) {
         this.airportRepository.delete({id})
-        // const index = this.datasourceService
-        //   .getAirports()
-        //   .findIndex((airport) => airport.id === id);
-        // this.datasourceService.getAirports().splice(index, 1);
-        // return HttpStatus.OK;
       }
-    
-    
-    
     
 }
