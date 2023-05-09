@@ -5,6 +5,7 @@ import { AirportService } from './airport.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Airport } from './airport.entity';
 import { Flight } from 'src/flight/flight.entity';
+import { Ticket } from 'src/ticket/ticket.entity';
 
 @Module({
 
@@ -12,7 +13,7 @@ controllers: [AirportController],
 
 providers: [AirportService],
 
-imports: [DatasourceModule, TypeOrmModule.forFeature([Airport, Flight])]
+imports: [DatasourceModule, TypeOrmModule.forFeature([Airport, Flight, Ticket])]
 
 })
 

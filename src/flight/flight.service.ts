@@ -47,7 +47,7 @@ export class FlightService {
 
     remove(id: number) {
         this.flightRepository.delete({id})
-      }
+    }
     
     
     

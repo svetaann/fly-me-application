@@ -2,10 +2,12 @@
 import { Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
 import { Ticket } from './ticket.entity';
 import { TicketService } from './ticket.service';
+import { ApiTags } from '@nestjs/swagger';
 
 
 
 @Controller('ticket')
+@ApiTags('Билет')
 export class TicketController {
     constructor(
         private readonly ticketService: TicketService) {}

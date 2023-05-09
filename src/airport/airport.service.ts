@@ -7,7 +7,6 @@ import { Repository } from "typeorm";
 @Injectable()
 export class AirportService {
     constructor(
-
         @InjectRepository(Airport)
         private readonly airportRepository: Repository<Airport>){}
 

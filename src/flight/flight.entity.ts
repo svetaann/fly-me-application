@@ -1,7 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { type } from "os";
 import { Airport } from "src/airport/airport.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Ticket } from "src/ticket/ticket.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name: 'flight'})
 export class Flight {
@@ -30,4 +31,7 @@ export class Flight {
     @ManyToOne(type => Airport, to_airport => to_airport.flights2)
     @JoinColumn({name:"to_airport_id"})
     to_airport: Airport
+
+    @OneToMany(type => Ticket, ticket => ticket.flight)
+    tickets: Ticket[];
 }

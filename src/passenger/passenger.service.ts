@@ -1,47 +1,49 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { DatasourceService } from "src/datasource/datasource.service";
 import { Passenger } from "./passenger.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+
 
 
 @Injectable()
-
 export class PassengerService {
     constructor(
-        private readonly datasourceService: DatasourceService) {}
+        @InjectRepository(Passenger)
+        private readonly passengerRepository: Repository<Passenger>) {}
 
-    create(passenger: Passenger) {
+    async create(passenger: Passenger): Promise<Passenger> {
 
-        this.datasourceService.getPassengers().push(passenger);
-            
-        return passenger;
-            
+        const newPassenger = await this.passengerRepository.create(passenger)
+        newPassenger.fullname = passenger.fullname;
+        newPassenger.birth_date = passenger.birth_date;
+        newPassenger.passport = passenger.passport;
+        await this.passengerRepository.save(newPassenger);
+        return passenger
+
     }
 
-    findOne(id: number) {
+    findOne(id: number): Promise<Passenger> {
 
-        return this.datasourceService
+        return this.passengerRepository.findOne({where:{id}});
         
-        .getPassengers()
-        
-        .find((passenger) => passenger.id === id);
-        
     }
-    findAll(): Passenger[] {
-        return this.datasourceService.getPassengers();
+
+    async findAll(): Promise<Passenger[]> {
+        return this.passengerRepository.find();
     }
-    update(id: number, updatedPassenger: Passenger) {
-        const index = this.datasourceService
-          .getPassengers()
-          .findIndex((passenger) => passenger.id === id);
-        this.datasourceService.getPassengers()[index] = updatedPassenger;
-        return this.datasourceService.getPassengers()[index];
+
+    async update(id: number, updatedPassenger: Passenger) {
+        const passenger = await this.passengerRepository.findOne({where:{id}});
+        passenger.fullname = updatedPassenger.fullname;
+        passenger.birth_date = updatedPassenger.birth_date;
+        passenger.passport = updatedPassenger.passport;
+        await this.passengerRepository.save(passenger)
+        return passenger
     }
+
     remove(id: number) {
-        const index = this.datasourceService
-          .getPassengers()
-          .findIndex((passenger) => passenger.id === id);
-        this.datasourceService.getPassengers().splice(index, 1);
-        return HttpStatus.OK;
+        this.passengerRepository.delete({id})
       }
     
     
