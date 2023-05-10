@@ -7,14 +7,13 @@ import { Plane } from 'src/plane/plane.entity';
 import { Passenger } from './passenger.entity';
 import { Ticket } from 'src/ticket/ticket.entity';
 
-
 @Module({
 
-controllers: [PassengerController],
+    controllers: [PassengerController],
 
-providers: [PassengerService],
+    providers: [PassengerService],
 
-imports: [DatasourceModule, TypeOrmModule.forFeature([Passenger, Ticket])]
+    imports: [DatasourceModule, TypeOrmModule.forFeature([Passenger, Ticket])]
 
 })
 

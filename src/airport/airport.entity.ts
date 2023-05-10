@@ -3,8 +3,6 @@ import { type } from "os";
 import { Flight } from "src/flight/flight.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
-
-
 @Entity({name:'airport'})
 export class Airport {
     @ApiProperty({ example: '1', description: 'Идентификатор' })

@@ -6,33 +6,31 @@ import { Plane } from 'src/plane/plane.entity';
 import { Ticket } from 'src/ticket/ticket.entity';
 
 @Injectable()
-
 export class DatasourceService {
 
-private planes: Plane[] = [];
-private airports: Airport[] = [];
-private passengers: Passenger[] = [];
-private flights: Flight[] = [];
-private tickets: Ticket[] = [];
+    private planes: Plane[] = [];
+    private airports: Airport[] = [];
+    private passengers: Passenger[] = [];
+    private flights: Flight[] = [];
+    private tickets: Ticket[] = [];
 
-getPlanes(): Plane[] {
-return this.planes;
-}
+    getPlanes(): Plane[] {
+    return this.planes;
+    }
 
-getAirports():Airport[]{
-    return this.airports;
-}
+    getAirports():Airport[]{
+        return this.airports;
+    }
 
-getPassengers():Passenger[]{
-    return this.passengers;
-}
+    getPassengers():Passenger[]{
+        return this.passengers;
+    }
 
-getFlights():Flight[]{
-    return this.flights;
-}
+    getFlights():Flight[]{
+        return this.flights;
+    }
 
-getTickets():Ticket[]{
-    return this.tickets;
-}
-
+    getTickets():Ticket[]{
+        return this.tickets;
+    }
 }

@@ -30,17 +30,16 @@ export class PassengerService {
 
     async findOne(id: number): Promise<IncompletePassenger> {
 
-        const passenger =  await this.passengerRepository.findOne({where:{id}});
+        const passenger =  await this.passengerRepository.findOne({where:{id}, relations: {tickets: true}});
         const ans = new IncompletePassenger()
         ans.fullname = passenger.fullname
         ans.birth_date = passenger.birth_date
-        const tickets = await this.ticketRepository.find({where:{passenger: passenger}})
+        const tickets = await this.ticketRepository.find({where:{passenger: {id:passenger.id}}})
         ans.ticketList = []
         for(let ticket of tickets){
             ans.ticketList.push(ticket.id)
         }
         return ans
-        
     }
 
     async findAll(): Promise<Passenger[]> {
@@ -58,7 +57,7 @@ export class PassengerService {
 
     remove(id: number) {
         this.passengerRepository.delete({id})
-      }
+    }
     
     
     

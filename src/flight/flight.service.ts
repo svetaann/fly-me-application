@@ -5,11 +5,11 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 @Injectable()
-
 export class FlightService {
     constructor(
         @InjectRepository(Flight)
-        private readonly flightRepository: Repository<Flight>) {}
+        private readonly flightRepository: Repository<Flight>
+    ) {}
 
     async create(flight: Flight): Promise<Flight> {
 
@@ -21,13 +21,11 @@ export class FlightService {
         newflight.to_airport = flight.to_airport
         await this.flightRepository.save(newflight)
         return flight;
-            
     }
 
     findOne(id: number): Promise<Flight> {
 
         return this.flightRepository.findOne({where: {id}})
-        
     }
 
     async findAll(): Promise<Flight[]> {

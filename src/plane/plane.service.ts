@@ -9,7 +9,8 @@ import { Repository } from "typeorm";
 export class PlaneService {
     constructor(
         @InjectRepository(Plane)
-        private readonly planeRepository: Repository<Plane>) {}
+        private readonly planeRepository: Repository<Plane>
+    ) {}
 
     async create(plane: Plane): Promise<Plane> {
 
@@ -18,7 +19,6 @@ export class PlaneService {
         newPlane.seats_amount = plane.seats_amount
         await this.planeRepository.save(newPlane)
         return plane
-            
     }
 
     findOne(id: number): Promise<Plane> {

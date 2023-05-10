@@ -9,12 +9,11 @@ import { Ticket } from 'src/ticket/ticket.entity';
 
 @Module({
 
-controllers: [FlightController],
+    controllers: [FlightController],
 
-providers: [FlightService],
+    providers: [FlightService],
 
-imports: [DatasourceModule, TypeOrmModule.forFeature([Flight, Airport, Ticket])]
+    imports: [DatasourceModule, TypeOrmModule.forFeature([Flight, Airport, Ticket])]
 
 })
-
 export class FlightModule {}

@@ -55,15 +55,10 @@ export class TicketService {
         fullTicket.date = ticket.date;
         fullTicket.gate = ticket.gate;
         fullTicket.seat = ticket.seat;
-
         fullTicket.terminal = ticket.terminal;
         fullTicket.price = ticket.price;
         fullTicket.luggage = ticket.luggage;
         fullTicket.food = ticket.food;
-        const passenger = ticket.passenger
-        const plane = ticket.plane
-        const flight = ticket.flight
-        
         fullTicket.passengerName = ticket.passenger.fullname
         fullTicket.plane = ticket.plane.name
         fullTicket.flight = ticket.flight.name
