@@ -48,29 +48,29 @@ export class TicketService {
         
     }
 
-    // async findFullOne(id: number): Promise<FullTicket>{
-    //     const fullTicket = new FullTicket()
-    //     const ticket = await this.ticketRepository.findOne({where:{id}})
-    //     fullTicket.class = ticket.class;
-    //     fullTicket.date = ticket.date;
-    //     fullTicket.gate = ticket.gate;
-    //     fullTicket.seat = ticket.seat;
+    async findFullOne(id: number): Promise<FullTicket>{
+        const fullTicket = new FullTicket()
+        const ticket = await this.ticketRepository.findOne({where:{id}, relations:{plane: true, flight: true, passenger: true}})
+        fullTicket.class = ticket.class;
+        fullTicket.date = ticket.date;
+        fullTicket.gate = ticket.gate;
+        fullTicket.seat = ticket.seat;
 
-    //     fullTicket.terminal = ticket.terminal;
-    //     fullTicket.price = ticket.price;
-    //     fullTicket.luggage = ticket.luggage;
-    //     fullTicket.food = ticket.food;
-    //     //const passenger = ticket.passenger
-    //     // const plane = ticket.plane
-    //     // const flight = ticket.flight
+        fullTicket.terminal = ticket.terminal;
+        fullTicket.price = ticket.price;
+        fullTicket.luggage = ticket.luggage;
+        fullTicket.food = ticket.food;
+        const passenger = ticket.passenger
+        const plane = ticket.plane
+        const flight = ticket.flight
         
-    //     // fullTicket.passengerName = ticket.passenger.fullname
-    //     // fullTicket.plane = ticket.plane.name
-    //     // fullTicket.flight = ticket.flight.name
-    //     // fullTicket.startTime = ticket.flight.start_time
-    //     // fullTicket.endTime = ticket.flight.end_time
-    //     return fullTicket
-    // }
+        fullTicket.passengerName = ticket.passenger.fullname
+        fullTicket.plane = ticket.plane.name
+        fullTicket.flight = ticket.flight.name
+        fullTicket.startTime = ticket.flight.start_time
+        fullTicket.endTime = ticket.flight.end_time
+        return fullTicket
+    }
 
     async findAll(): Promise<Ticket[]> {
         return await this.ticketRepository.find();

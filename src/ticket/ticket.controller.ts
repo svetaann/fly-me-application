@@ -21,7 +21,10 @@ export class TicketController {
     findOne(@Param('id') id: string) {
         return this.ticketService.findOne(+id);
     }
-    
+    @Get('/full/:id')
+    findFullOne(@Param('id') id: string) {
+        return this.ticketService.findFullOne(+id);
+    }
     @Put(':id')
     update(@Param('id') id: string, @Body() updateTicket: Ticket) {
         return this.ticketService.update(+id, updateTicket);
