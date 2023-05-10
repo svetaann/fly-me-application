@@ -3,6 +3,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
 import { Ticket } from './ticket.entity';
 import { TicketService } from './ticket.service';
 import { ApiTags } from '@nestjs/swagger';
+import { CreateTicket } from './createTicket.dto';
 
 
 
@@ -25,7 +26,7 @@ export class TicketController {
         return this.ticketService.update(+id, updateTicket);
     }
     @Post()
-    create(@Body() createTicket: Ticket) {
+    create(@Body() createTicket: CreateTicket) {
         return this.ticketService.create(createTicket);
     }
     @Delete(':id')

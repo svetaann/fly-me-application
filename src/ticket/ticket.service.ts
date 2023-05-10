@@ -3,28 +3,37 @@ import { DatasourceService } from "src/datasource/datasource.service";
 import { Ticket } from "./ticket.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { CreateTicket } from "./createTicket.dto";
+import { Flight } from "src/flight/flight.entity";
+import { Plane } from "src/plane/plane.entity";
 
 
 @Injectable()
 export class TicketService {
     constructor(
         @InjectRepository(Ticket)
-        private readonly ticketRepository: Repository<Ticket>) {}
+        private readonly ticketRepository: Repository<Ticket>,
+        @InjectRepository(Flight)
+        private readonly flightRepository: Repository<Flight>,
+        @InjectRepository(Plane)
+        private readonly planeRepository: Repository<Plane>
+        ) {}
 
-    async create(ticket: Ticket): Promise<Ticket> {
+    async create(ticket: CreateTicket): Promise<CreateTicket> {
 
-        const newTicket = await this.ticketRepository.create(ticket)
+        const newTicket = await this.ticketRepository.create()
         newTicket.class = ticket.class;
         newTicket.terminal = ticket.terminal;
         newTicket.seat = ticket.seat;
         newTicket.gate = ticket.gate;
         newTicket.date = ticket.date;
-        newTicket.food = ticket.food;
-        newTicket.luggage = ticket.luggage;
         newTicket.price = ticket.price;
-        newTicket.flight = ticket.flight;
-        newTicket.plane = ticket.plane;
-        newTicket.passenger = ticket.passenger;
+        const flightId = ticket.flight_id;
+        const flight = await this.flightRepository.findOne({where:{id:flightId}}) ;
+        const planeId = ticket.plane_id;
+        const plane = await this.planeRepository.findOne({where:{id:planeId}})
+        newTicket.flight = flight
+        newTicket.plane = plane
         await this.ticketRepository.save(newTicket)
         return ticket
     }

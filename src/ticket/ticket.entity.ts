@@ -35,7 +35,6 @@ export class Ticket {
     @ApiProperty({ example: '2300', description: 'Цена' })
     @Column()
     price: number;
-    
     @ManyToOne(type => Passenger, passenger => passenger.tickets)
     @JoinColumn({name:"passenger_id"})
     passenger: Passenger

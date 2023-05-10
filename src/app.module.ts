@@ -11,6 +11,7 @@ import { Flight } from './flight/flight.entity';
 import { Plane } from './plane/plane.entity';
 import { Passenger } from './passenger/passenger.entity';
 import { Ticket } from './ticket/ticket.entity';
+import { CreateTicket } from './ticket/createTicket.dto';
 
 @Module({
     imports: [PlaneModule, DatasourceModule, AirportModule, PassengerModule
