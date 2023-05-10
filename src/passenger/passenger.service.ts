@@ -3,6 +3,8 @@ import { DatasourceService } from "src/datasource/datasource.service";
 import { Passenger } from "./passenger.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { IncompletePassenger } from "./incompletePassenger.dto";
+import { Ticket } from "src/ticket/ticket.entity";
 
 
 
@@ -10,7 +12,10 @@ import { Repository } from "typeorm";
 export class PassengerService {
     constructor(
         @InjectRepository(Passenger)
-        private readonly passengerRepository: Repository<Passenger>) {}
+        private readonly passengerRepository: Repository<Passenger>,
+        @InjectRepository(Ticket)
+        private readonly ticketRepository: Repository<Ticket>
+        ) {}
 
     async create(passenger: Passenger): Promise<Passenger> {
 
@@ -23,9 +28,18 @@ export class PassengerService {
 
     }
 
-    findOne(id: number): Promise<Passenger> {
+    async findOne(id: number): Promise<IncompletePassenger> {
 
-        return this.passengerRepository.findOne({where:{id}});
+        const passenger =  await this.passengerRepository.findOne({where:{id}});
+        const ans = new IncompletePassenger()
+        ans.fullname = passenger.fullname
+        ans.birth_date = passenger.birth_date
+        const tickets = await this.ticketRepository.find({where:{passenger: passenger}})
+        ans.ticketList = []
+        for(let ticket of tickets){
+            ans.ticketList.push(ticket.id)
+        }
+        return ans
         
     }
 

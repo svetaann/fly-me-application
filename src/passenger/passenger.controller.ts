@@ -17,8 +17,8 @@ export class PassengerController {
         return this.passengerService.findAll();
     }
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.passengerService.findOne(+id);
+    findOne(@Param('id') id: number) {
+        return this.passengerService.findOne(id);
     }
     @Put(':id')
     update(@Param('id') id: string, @Body() updatePassenger: Passenger) {
