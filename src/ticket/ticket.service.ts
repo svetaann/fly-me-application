@@ -8,6 +8,7 @@ import { Flight } from "src/flight/flight.entity";
 import { Plane } from "src/plane/plane.entity";
 import { FullTicket } from "./fullTicket.dto";
 import { Passenger } from "src/passenger/passenger.entity";
+import { Airport } from "src/airport/airport.entity";
 
 
 @Injectable()
@@ -20,7 +21,9 @@ export class TicketService {
         @InjectRepository(Plane)
         private readonly planeRepository: Repository<Plane>,
         @InjectRepository(Passenger)
-        private readonly passengerRepository: Repository<Passenger>
+        private readonly passengerRepository: Repository<Passenger>,
+        @InjectRepository(Airport)
+        private readonly airportRepository: Repository<Airport>
         ) {}
 
     async create(ticket: CreateTicket): Promise<CreateTicket> {
@@ -69,6 +72,55 @@ export class TicketService {
 
     async findAll(): Promise<Ticket[]> {
         return await this.ticketRepository.find();
+    }
+    async findTickets(from: string, to: string, date: string): Promise<FullTicket[]>{
+        const tickets = await this.ticketRepository.find({where:{date:date}, relations: {flight: true, plane:true}})
+        const fromAiroports = await this.airportRepository.find({where: {city: from}})
+        const toAirports = await this.airportRepository.find({where:{city: to}})
+        const flights = await this.flightRepository.find({relations: {to_airport:true, from_airport:true}})
+        console.log(tickets)
+        console.log(fromAiroports)
+        console.log(toAirports)
+        console.log(flights)
+        let needFlights: Flight[]
+        needFlights = []
+        for(const f of flights){
+            for(const fa of fromAiroports){
+                if (f.from_airport.id == fa.id){
+                    for(const ta of toAirports){
+                        if (f.to_airport.id == ta.id){
+                            needFlights.push(f)
+                        }
+                    }
+                }
+            }
+        }
+        console.log(5)
+        console.log(needFlights)
+        let needTickets: FullTicket[]
+        needTickets = []
+        for(let t of tickets){
+            for(let nf of needFlights){
+                if (t.flight.id == nf.id){
+                    const fullticket = new FullTicket()
+                    fullticket.class = t.class
+                    fullticket.date = t.date
+                    fullticket.endTime = t.flight.end_time
+                    fullticket.flight = t.flight.name
+                    // fullticket.from_city = t.flight.from_airport.city
+                    fullticket.gate = t.gate
+                    fullticket.plane = t.plane.name
+                    fullticket.price = t.price
+                    fullticket.seat = t.seat
+                    fullticket.startTime = t.flight.start_time
+                    fullticket.terminal = t.terminal
+                    // fullticket.to_city = t.flight.to_airport.city
+                    needTickets.push(fullticket)
+                }
+            }
+        }
+        console.log(needTickets)
+        return needTickets;
     }
 
     async update(id: number, updatedTicket: Ticket) {

@@ -1,5 +1,5 @@
 
-import { Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query} from '@nestjs/common';
 import { Ticket } from './ticket.entity';
 import { TicketService } from './ticket.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -16,7 +16,10 @@ export class TicketController {
     findAll() {
         return this.ticketService.findAll();
     }
-
+    @Get('/find')
+    findTickets(@Query() params: any){
+        return this.ticketService.findTickets(params.from,params.to, params.date);
+    }
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.ticketService.findOne(+id);

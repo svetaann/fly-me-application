@@ -25,7 +25,7 @@ export class Flight {
 
     @ManyToOne(type => Airport, from_airport => from_airport.flights)
     @JoinColumn({name:"from_airport_id"})
-    from_airport: AirportService
+    from_airport: Airport
 
     @ManyToOne(type => Airport, to_airport => to_airport.flights2)
     @JoinColumn({name:"to_airport_id"})
