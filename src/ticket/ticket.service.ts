@@ -111,6 +111,8 @@ export class TicketService {
                     fullticket.startTime = t.flight.start_time
                     fullticket.terminal = t.terminal
                     fullticket.to_airport = nf.to_airport.name
+                    fullticket.from_iata = nf.from_airport.iata
+                    fullticket.to_iata = nf.to_airport.iata
                     needTickets.push(fullticket)
                 }
             }

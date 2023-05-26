@@ -29,5 +29,7 @@ export class FullTicket {
     endTime: string;
     from_airport: string;
     to_airport: string;
+    from_iata: string;
+    to_iata: string
     }
     
