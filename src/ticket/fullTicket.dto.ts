@@ -27,7 +27,7 @@ export class FullTicket {
     startTime: string;
     @ApiProperty({ example: '16:33', description: 'Время прилета' })
     endTime: string;
-    from_city: string;
-    to_city: string;
+    from_airport: string;
+    to_airport: string;
     }
     

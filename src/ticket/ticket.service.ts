@@ -74,14 +74,10 @@ export class TicketService {
         return await this.ticketRepository.find();
     }
     async findTickets(from: string, to: string, date: string): Promise<FullTicket[]>{
-        const tickets = await this.ticketRepository.find({where:{date:date}, relations: {flight: true, plane:true}})
+        const tickets = await this.ticketRepository.find({where:[{date:date},{passenger:null}], relations: {flight: true, plane:true, passenger: true}})
         const fromAiroports = await this.airportRepository.find({where: {city: from}})
         const toAirports = await this.airportRepository.find({where:{city: to}})
         const flights = await this.flightRepository.find({relations: {to_airport:true, from_airport:true}})
-        console.log(tickets)
-        console.log(fromAiroports)
-        console.log(toAirports)
-        console.log(flights)
         let needFlights: Flight[]
         needFlights = []
         for(const f of flights){
@@ -107,14 +103,14 @@ export class TicketService {
                     fullticket.date = t.date
                     fullticket.endTime = t.flight.end_time
                     fullticket.flight = t.flight.name
-                    // fullticket.from_city = t.flight.from_airport.city
+                    fullticket.from_airport = nf.from_airport.name
                     fullticket.gate = t.gate
                     fullticket.plane = t.plane.name
                     fullticket.price = t.price
                     fullticket.seat = t.seat
                     fullticket.startTime = t.flight.start_time
                     fullticket.terminal = t.terminal
-                    // fullticket.to_city = t.flight.to_airport.city
+                    fullticket.to_airport = nf.to_airport.name
                     needTickets.push(fullticket)
                 }
             }
