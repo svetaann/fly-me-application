@@ -4,6 +4,7 @@ import { Ticket } from './ticket.entity';
 import { TicketService } from './ticket.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateTicket } from './createTicket.dto';
+import { Passenger } from 'src/passenger/passenger.entity';
 
 
 
@@ -38,6 +39,12 @@ export class TicketController {
     @Post()
     create(@Body() createTicket: CreateTicket) {
         return this.ticketService.create(createTicket);
+    }
+
+    @Post('/buy/:id')
+    userBoughtTicket(@Param('id') id: number, @Body() newPassenger: Passenger ){
+        console.log(id, newPassenger)
+        return this.ticketService.userBoughtTicket(+id, newPassenger)
     }
 
     @Delete(':id')

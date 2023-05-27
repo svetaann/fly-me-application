@@ -73,6 +73,27 @@ export class TicketService {
     async findAll(): Promise<Ticket[]> {
         return await this.ticketRepository.find();
     }
+
+    async userBoughtTicket(ticketId: number, addedPassenger: Passenger): Promise<Ticket>{
+        const name = await addedPassenger.fullname
+        const birthDate = addedPassenger.birth_date
+        const passport = addedPassenger.passport
+        const findedPassengers = await this.passengerRepository.find({where:[{fullname: name},{birth_date:birthDate},{passport: passport}]})
+        console.log(findedPassengers)
+        if (findedPassengers.length == 0){
+            const newPassenger = await this.passengerRepository.create()
+            newPassenger.fullname = name
+            newPassenger.birth_date = birthDate
+            newPassenger.passport = passport
+            await this.passengerRepository.save(newPassenger)
+        }
+        const passenger = await this.passengerRepository.findOne({where:[{fullname: name},{birth_date:birthDate},{passport: passport}]})
+        const ticket = await this.ticketRepository.findOne({where:{id:ticketId}})
+        ticket.passenger = passenger
+        await this.ticketRepository.save(ticket)
+        return ticket
+    }
+
     async findTickets(from: string, to: string, date: string): Promise<FullTicket[]>{
         const tickets = await this.ticketRepository.find({where:[{date:date},{passenger:null}], relations: {flight: true, plane:true, passenger: true}})
         const fromAiroports = await this.airportRepository.find({where: {city: from}})
@@ -99,6 +120,7 @@ export class TicketService {
             for(let nf of needFlights){
                 if (t.flight.id == nf.id){
                     const fullticket = new FullTicket()
+                    fullticket.id = t.id
                     fullticket.class = t.class
                     fullticket.date = t.date
                     fullticket.endTime = t.flight.end_time

@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class FullTicket {
+    id: number;
     @ApiProperty({ example: 'Эконом', description: 'Класс комфорта' })
     class: string;
     @ApiProperty({ example: 'A', description: 'Терминал' })
