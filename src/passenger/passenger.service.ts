@@ -23,6 +23,7 @@ export class PassengerService {
         newPassenger.fullname = passenger.fullname;
         newPassenger.birth_date = passenger.birth_date;
         newPassenger.passport = passenger.passport;
+        newPassenger.email = passenger.email;
         await this.passengerRepository.save(newPassenger);
         return passenger
 
@@ -51,6 +52,7 @@ export class PassengerService {
         passenger.fullname = updatedPassenger.fullname;
         passenger.birth_date = updatedPassenger.birth_date;
         passenger.passport = updatedPassenger.passport;
+        passenger.email = updatedPassenger.email
         await this.passengerRepository.save(passenger)
         return passenger
     }

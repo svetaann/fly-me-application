@@ -2,7 +2,7 @@ import { HttpStatus, Injectable } from "@nestjs/common";
 import { DatasourceService } from "src/datasource/datasource.service";
 import { Ticket } from "./ticket.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { IsNull, Repository } from "typeorm";
 import { CreateTicket } from "./createTicket.dto";
 import { Flight } from "src/flight/flight.entity";
 import { Plane } from "src/plane/plane.entity";
@@ -78,16 +78,18 @@ export class TicketService {
         const name = await addedPassenger.fullname
         const birthDate = addedPassenger.birth_date
         const passport = addedPassenger.passport
-        const findedPassengers = await this.passengerRepository.find({where:[{fullname: name},{birth_date:birthDate},{passport: passport}]})
+        const email = addedPassenger.email
+        const findedPassengers = await this.passengerRepository.find({where:{fullname: name,birth_date:birthDate,passport: passport,email: email}})
         console.log(findedPassengers)
         if (findedPassengers.length == 0){
             const newPassenger = await this.passengerRepository.create()
             newPassenger.fullname = name
             newPassenger.birth_date = birthDate
             newPassenger.passport = passport
+            newPassenger.email = email
             await this.passengerRepository.save(newPassenger)
         }
-        const passenger = await this.passengerRepository.findOne({where:[{fullname: name},{birth_date:birthDate},{passport: passport}]})
+        const passenger = await this.passengerRepository.findOne({where:{fullname: name,birth_date:birthDate,passport: passport,email: email}})
         const ticket = await this.ticketRepository.findOne({where:{id:ticketId}})
         ticket.passenger = passenger
         await this.ticketRepository.save(ticket)
@@ -95,7 +97,8 @@ export class TicketService {
     }
 
     async findTickets(from: string, to: string, date: string): Promise<FullTicket[]>{
-        const tickets = await this.ticketRepository.find({where:[{date:date},{passenger:null}], relations: {flight: true, plane:true, passenger: true}})
+        const tickets = await this.ticketRepository.find({where:{passenger:IsNull(), date:date}, relations: {flight: true, plane:true, passenger: true}})
+        console.log(tickets)
         const fromAiroports = await this.airportRepository.find({where: {city: from}})
         const toAirports = await this.airportRepository.find({where:{city: to}})
         const flights = await this.flightRepository.find({relations: {to_airport:true, from_airport:true}})

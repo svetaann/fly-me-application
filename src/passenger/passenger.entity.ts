@@ -19,6 +19,10 @@ export class Passenger {
     @ApiProperty({ example: '8018 123456', description: 'Номер паспорта' })
     @Column()
     passport: string;
+
+    @ApiProperty({ example: 'ivan@ya.ru', description: 'Email' })
+    @Column()
+    email: string;
     
     @OneToMany(type => Ticket, ticket => ticket.passenger)
     tickets: Ticket[];
