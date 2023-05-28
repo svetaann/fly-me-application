@@ -17,6 +17,10 @@ export class TicketController {
     findAll() {
         return this.ticketService.findAll();
     }
+    @Get('/fullForSale')
+    findFullAll_forSale(){
+        return this.ticketService.findFullAll_forSale();
+    }
     @Get('/find')
     findTickets(@Query() params: any){
         return this.ticketService.findTickets(params.from,params.to, params.date);

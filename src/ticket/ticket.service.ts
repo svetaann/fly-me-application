@@ -50,6 +50,35 @@ export class TicketService {
         return this.ticketRepository.findOne({where: {id}})
         
     }
+    async findFullAll_forSale(): Promise<FullTicket[]>{
+        const allFullTickets: FullTicket[] = []
+        const allTickets = await this.ticketRepository.find({where:{passenger: IsNull()}, relations:{passenger:true, plane: true, flight: true}})
+        
+        for(const ticket of allTickets){
+            const fullTicket = new FullTicket()
+            fullTicket.id = ticket.id
+            fullTicket.class = ticket.class
+            fullTicket.terminal = ticket.terminal
+            fullTicket.seat = ticket.seat
+            fullTicket.gate = ticket.gate
+            fullTicket.date = ticket.date
+            fullTicket.price = ticket.price
+            fullTicket.plane = ticket.plane.name
+            const flight = await this.flightRepository.findOne({where:{id:ticket.flight.id}, relations:{to_airport: true, from_airport: true}})
+            fullTicket.flight = flight.name
+            fullTicket.startTime = flight.start_time
+            fullTicket.endTime = flight.end_time
+            fullTicket.from_airport = flight.from_airport.name
+            fullTicket.to_airport = flight.to_airport.name
+            fullTicket.from_iata = flight.from_airport.iata
+            fullTicket.to_iata = flight.to_airport.iata
+            fullTicket.from_city = flight.from_airport.city
+            fullTicket.to_city = flight.to_airport.city
+            allFullTickets.push(fullTicket)
+        }
+        return allFullTickets
+
+    }
 
     async findFullOne(id: number): Promise<FullTicket>{
         const fullTicket = new FullTicket()

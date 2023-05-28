@@ -31,6 +31,8 @@ export class FullTicket {
     from_airport: string;
     to_airport: string;
     from_iata: string;
-    to_iata: string
+    to_iata: string;
+    from_city: string;
+    to_city: string;
     }
     
