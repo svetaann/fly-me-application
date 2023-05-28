@@ -207,15 +207,40 @@ export class TicketService {
             })
             const birth_string = ticket.passenger.birth_date
             let birth_date = new Date(birth_string)
-
+            let food: string = ""
+            let luggage: string = ""
+            if(ticket.luggage){
+                luggage = "Оплачен"
+            }else{
+                luggage = "Отсутствует"
+            }
+            if(ticket.food){
+                 food = "Предоставляется"
+            }else{
+                 food = "Отсутствует"
+            }
             doc.font(`src/ofont.ru_Kanit Cyrillic.ttf`)
             doc.text("Пассажир:")
             doc.moveDown();
             doc.text(`ФИО: ${ticket.passenger.fullname} Дата рождения: ${(new Date(ticket.passenger.birth_date)).toLocaleDateString()} Паспорт:${ticket.passenger.passport}`)
             doc.moveDown();
+            doc.text("Информация о перелёте:")
             doc.moveDown();
-            doc.text(`${flight.from_airport.city} - ${flight.to_airport.city}`)
-
+            doc.text(`${(new Date(ticket.date)).toLocaleDateString()}`)
+            doc.moveDown();
+            doc.text(`${flight.from_airport.city} ${flight.from_airport.iata}(${flight.from_airport.name}) - ${flight.to_airport.city} ${flight.to_airport.iata}(${flight.to_airport.name})`)
+            doc.moveDown();
+            doc.text(`Вылет: ${flight.start_time} терминал ${ticket.terminal} выход на посадку ${ticket.gate}`)
+            doc.moveDown();
+            doc.text(`Прилет: ${flight.end_time}`)
+            doc.moveDown();
+            doc.text(`Место: ${ticket.seat}   Класс: ${ticket.class}   Питание: ${food}   Багаж: ${luggage}`,{align: 'center'})
+            doc.moveDown();
+            doc.text("Qr-код для оплаты:")
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            doc.image('src/QR-Code.png')
             const buffer = []
             doc.on('data', buffer.push.bind(buffer))
             doc.on('end', () => {
