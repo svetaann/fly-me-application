@@ -1,19 +1,17 @@
 
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Res} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Res } from '@nestjs/common';
 import { Ticket } from './ticket.entity';
 import { TicketService } from './ticket.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateTicket } from './createTicket.dto';
 import { Passenger } from 'src/passenger/passenger.entity';
-import * as fs from 'fs';
-import * as PdfPrinter from 'pdfmake';
-import * as uuid from 'uuid';
+
 
 
 @Controller('ticket')
 @ApiTags('Билет')
 export class TicketController {
-    constructor(private readonly ticketService: TicketService) {}
+    constructor(private readonly ticketService: TicketService) { }
 
     @Get()
     findAll() {
@@ -33,25 +31,25 @@ export class TicketController {
         res.end(buffer);
     }
     @Get('/fullForSale')
-    findFullAll_forSale(){
+    findFullAll_forSale() {
         return this.ticketService.findFullAll_forSale();
     }
     @Get('/find')
-    findTickets(@Query() params: any){
-        return this.ticketService.findTickets(params.from,params.to, params.date);
+    findTickets(@Query() params: any) {
+        return this.ticketService.findTickets(params.from, params.to, params.date);
     }
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.ticketService.findOne(+id);
     }
 
-    
+
 
     @Get('/full/:id')
     findFullOne(@Param('id') id: string) {
         return this.ticketService.findFullOne(+id);
     }
-    
+
     @Put(':id')
     update(@Param('id') id: string, @Body() updateTicket: Ticket) {
         return this.ticketService.update(+id, updateTicket);
@@ -63,7 +61,7 @@ export class TicketController {
     }
 
     @Post('/buy/:id')
-    userBoughtTicket(@Param('id') id: number, @Body() data: any ){
+    userBoughtTicket(@Param('id') id: number, @Body() data: any) {
         console.log(id, data)
         return this.ticketService.userBoughtTicket(+id, data)
     }

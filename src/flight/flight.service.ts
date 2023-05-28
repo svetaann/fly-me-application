@@ -9,7 +9,7 @@ export class FlightService {
     constructor(
         @InjectRepository(Flight)
         private readonly flightRepository: Repository<Flight>
-    ) {}
+    ) { }
 
     async create(flight: Flight): Promise<Flight> {
 
@@ -25,7 +25,7 @@ export class FlightService {
 
     findOne(id: number): Promise<Flight> {
 
-        return this.flightRepository.findOne({where: {id}})
+        return this.flightRepository.findOne({ where: { id } })
     }
 
     async findAll(): Promise<Flight[]> {
@@ -33,7 +33,7 @@ export class FlightService {
     }
 
     async update(id: number, updatedFlight: Flight) {
-        const flight = await this.flightRepository.findOne({where:{id}})
+        const flight = await this.flightRepository.findOne({ where: { id } })
         flight.name = updatedFlight.name
         flight.from_airport = updatedFlight.from_airport
         flight.to_airport = updatedFlight.to_airport
@@ -44,10 +44,6 @@ export class FlightService {
     }
 
     remove(id: number) {
-        this.flightRepository.delete({id})
+        this.flightRepository.delete({ id })
     }
-    
-    
-    
-    
 }

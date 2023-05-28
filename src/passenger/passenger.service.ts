@@ -15,7 +15,7 @@ export class PassengerService {
         private readonly passengerRepository: Repository<Passenger>,
         @InjectRepository(Ticket)
         private readonly ticketRepository: Repository<Ticket>
-        ) {}
+    ) { }
 
     async create(passenger: Passenger): Promise<Passenger> {
 
@@ -31,13 +31,13 @@ export class PassengerService {
 
     async findOne(id: number): Promise<IncompletePassenger> {
 
-        const passenger =  await this.passengerRepository.findOne({where:{id}, relations: {tickets: true}});
+        const passenger = await this.passengerRepository.findOne({ where: { id }, relations: { tickets: true } });
         const ans = new IncompletePassenger()
         ans.fullname = passenger.fullname
         ans.birth_date = passenger.birth_date
-        const tickets = await this.ticketRepository.find({where:{passenger: {id:passenger.id}}})
+        const tickets = await this.ticketRepository.find({ where: { passenger: { id: passenger.id } } })
         ans.ticketList = []
-        for(let ticket of tickets){
+        for (let ticket of tickets) {
             ans.ticketList.push(ticket.id)
         }
         return ans
@@ -48,7 +48,7 @@ export class PassengerService {
     }
 
     async update(id: number, updatedPassenger: Passenger) {
-        const passenger = await this.passengerRepository.findOne({where:{id}});
+        const passenger = await this.passengerRepository.findOne({ where: { id } });
         passenger.fullname = updatedPassenger.fullname;
         passenger.birth_date = updatedPassenger.birth_date;
         passenger.passport = updatedPassenger.passport;
@@ -58,10 +58,10 @@ export class PassengerService {
     }
 
     remove(id: number) {
-        this.passengerRepository.delete({id})
+        this.passengerRepository.delete({ id })
     }
-    
-    
-    
-    
+
+
+
+
 }

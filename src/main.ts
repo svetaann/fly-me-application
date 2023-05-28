@@ -8,10 +8,10 @@ async function bootstrap() {
     const config = new DocumentBuilder()
         .setTitle('Education API')
         .setVersion('1.0')
-        .build(); 
+        .build();
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api_docs', app, document); 
+    SwaggerModule.setup('api_docs', app, document);
     await app.listen(3001);
-    await app.setGlobalPrefix('/api'); 
+    await app.setGlobalPrefix('/api');
 }
 bootstrap();

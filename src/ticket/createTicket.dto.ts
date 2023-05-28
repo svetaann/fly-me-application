@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Column } from "typeorm";
 
-export class CreateTicket{
+export class CreateTicket {
 
     @ApiProperty({ example: 'Эконом', description: 'Класс комфорта' })
     class: string;

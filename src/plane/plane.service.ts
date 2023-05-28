@@ -10,7 +10,7 @@ export class PlaneService {
     constructor(
         @InjectRepository(Plane)
         private readonly planeRepository: Repository<Plane>
-    ) {}
+    ) { }
 
     async create(plane: Plane): Promise<Plane> {
 
@@ -23,8 +23,8 @@ export class PlaneService {
 
     findOne(id: number): Promise<Plane> {
 
-        return this.planeRepository.findOne({where:{id}});
-        
+        return this.planeRepository.findOne({ where: { id } });
+
     }
 
     async findAll(): Promise<Plane[]> {
@@ -32,7 +32,7 @@ export class PlaneService {
     }
 
     async update(id: number, updatedPlane: Plane) {
-        const plane = await this.planeRepository.findOne({where:{id}});
+        const plane = await this.planeRepository.findOne({ where: { id } });
         plane.name = updatedPlane.name
         plane.seats_amount = updatedPlane.seats_amount
         await this.planeRepository.save(plane)
@@ -40,10 +40,10 @@ export class PlaneService {
     }
 
     remove(id: number) {
-        this.planeRepository.delete({id})
+        this.planeRepository.delete({ id })
     }
-    
-    
-    
-    
+
+
+
+
 }

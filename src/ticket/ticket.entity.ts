@@ -6,7 +6,7 @@ import { Passenger } from "src/passenger/passenger.entity";
 import { Plane } from "src/plane/plane.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({name:'ticket'})
+@Entity({ name: 'ticket' })
 export class Ticket {
     @ApiProperty({ example: '1', description: 'Идентификатор' })
     @PrimaryGeneratedColumn()
@@ -45,30 +45,14 @@ export class Ticket {
     price: number;
 
     @ManyToOne(type => Passenger, passenger => passenger.tickets)
-    @JoinColumn({name:"passenger_id"})
+    @JoinColumn({ name: "passenger_id" })
     passenger: Passenger
 
     @ManyToOne(type => Plane, plane => plane.tickets)
-    @JoinColumn({name:"plane_id"})
+    @JoinColumn({ name: "plane_id" })
     plane: Plane
 
     @ManyToOne(type => Flight, flight => flight.tickets)
-    @JoinColumn({name:"flight_id"})
+    @JoinColumn({ name: "flight_id" })
     flight: Flight
-
-    
-    // @ManyToOne(type => Airport)
-    // @JoinTable({
-    //     name: "flight",
-    //     joinColumn: {
-    //         name: "flight_id",
-    //         referencedColumnName: "id"
-    //     },
-    //     inverseJoinColumn: {
-    //         name: "to_airport_id",
-    //         referencedColumnName: "id"
-    //     }
-    // })
-    // toAirport: Airport;
 }
-    

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { PlaneService } from './plane.service';
 import { Plane } from './plane.entity';
 import { ApiTags } from '@nestjs/swagger';
@@ -6,7 +6,7 @@ import { ApiTags } from '@nestjs/swagger';
 @Controller('plane')
 @ApiTags('Самолет')
 export class PlaneController {
-    constructor( private readonly planeService: PlaneService) {}
+    constructor(private readonly planeService: PlaneService) { }
 
     @Get()
     findAll() {

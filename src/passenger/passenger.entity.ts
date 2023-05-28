@@ -2,7 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import { Ticket } from "src/ticket/ticket.entity";
 
-@Entity({name:'passenger'})
+@Entity({ name: 'passenger' })
 export class Passenger {
     @ApiProperty({ example: '1', description: 'Идентификатор' })
     @PrimaryGeneratedColumn()
@@ -23,7 +23,7 @@ export class Passenger {
     @ApiProperty({ example: 'ivan@ya.ru', description: 'Email' })
     @Column()
     email: string;
-    
+
     @OneToMany(type => Ticket, ticket => ticket.passenger)
     tickets: Ticket[];
-    }
+}

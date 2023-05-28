@@ -17,4 +17,4 @@ import { Ticket } from 'src/ticket/ticket.entity';
 
 })
 
-export class AirportModule {}
+export class AirportModule { }

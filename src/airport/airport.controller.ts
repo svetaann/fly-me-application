@@ -1,5 +1,5 @@
 
-import { Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { Airport } from './airport.entity';
 import { AirportService } from './airport.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -8,7 +8,7 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('Аэропорт')
 export class AirportController {
 
-    constructor( private readonly airportService: AirportService ) {}
+    constructor(private readonly airportService: AirportService) { }
 
     @Get()
     findAll() {
@@ -29,7 +29,7 @@ export class AirportController {
     create(@Body() createAirport: Airport) {
         return this.airportService.create(createAirport);
     }
-    
+
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.airportService.remove(+id);

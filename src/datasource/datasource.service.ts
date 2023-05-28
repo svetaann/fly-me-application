@@ -15,22 +15,22 @@ export class DatasourceService {
     private tickets: Ticket[] = [];
 
     getPlanes(): Plane[] {
-    return this.planes;
+        return this.planes;
     }
 
-    getAirports():Airport[]{
+    getAirports(): Airport[] {
         return this.airports;
     }
 
-    getPassengers():Passenger[]{
+    getPassengers(): Passenger[] {
         return this.passengers;
     }
 
-    getFlights():Flight[]{
+    getFlights(): Flight[] {
         return this.flights;
     }
 
-    getTickets():Ticket[]{
+    getTickets(): Ticket[] {
         return this.tickets;
     }
 }

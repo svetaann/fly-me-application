@@ -7,6 +7,6 @@ export class IncompletePassenger {
     birth_date: string;
     @ApiProperty({ example: '8018 123456', description: 'Номер паспорта' })
     passport: string;
-    @ApiProperty({example: [1, 2], description: 'Список билетов клиента'})
+    @ApiProperty({ example: [1, 2], description: 'Список билетов клиента' })
     ticketList: number[];
-    }
+}

@@ -16,4 +16,4 @@ import { Ticket } from 'src/ticket/ticket.entity';
     imports: [DatasourceModule, TypeOrmModule.forFeature([Flight, Airport, Ticket])]
 
 })
-export class FlightModule {}
+export class FlightModule { }

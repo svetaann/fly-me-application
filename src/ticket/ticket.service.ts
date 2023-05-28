@@ -9,7 +9,7 @@ import { Plane } from "src/plane/plane.entity";
 import { FullTicket } from "./fullTicket.dto";
 import { Passenger } from "src/passenger/passenger.entity";
 import { Airport } from "src/airport/airport.entity";
-import {resolve} from 'path'
+import { resolve } from 'path'
 const PDFDocument = require('pdfkit-table')
 
 @Injectable()
@@ -25,7 +25,7 @@ export class TicketService {
         private readonly passengerRepository: Repository<Passenger>,
         @InjectRepository(Airport)
         private readonly airportRepository: Repository<Airport>
-        ) {}
+    ) { }
 
     async create(ticket: CreateTicket): Promise<CreateTicket> {
 
@@ -37,9 +37,9 @@ export class TicketService {
         newTicket.date = ticket.date;
         newTicket.price = ticket.price;
         const flightId = ticket.flight_id;
-        const flight = await this.flightRepository.findOne({where:{id:flightId}}) ;
+        const flight = await this.flightRepository.findOne({ where: { id: flightId } });
         const planeId = ticket.plane_id;
-        const plane = await this.planeRepository.findOne({where:{id:planeId}})
+        const plane = await this.planeRepository.findOne({ where: { id: planeId } })
         newTicket.flight = flight
         newTicket.plane = plane
         await this.ticketRepository.save(newTicket)
@@ -48,14 +48,14 @@ export class TicketService {
 
     findOne(id: number): Promise<Ticket> {
 
-        return this.ticketRepository.findOne({where: {id}})
-        
+        return this.ticketRepository.findOne({ where: { id } })
+
     }
-    async findFullAll_forSale(): Promise<FullTicket[]>{
+    async findFullAll_forSale(): Promise<FullTicket[]> {
         const allFullTickets: FullTicket[] = []
-        const allTickets = await this.ticketRepository.find({where:{passenger: IsNull()}, relations:{passenger:true, plane: true, flight: true}})
-        
-        for(const ticket of allTickets){
+        const allTickets = await this.ticketRepository.find({ where: { passenger: IsNull() }, relations: { passenger: true, plane: true, flight: true } })
+
+        for (const ticket of allTickets) {
             const fullTicket = new FullTicket()
             fullTicket.id = ticket.id
             fullTicket.class = ticket.class
@@ -65,7 +65,7 @@ export class TicketService {
             fullTicket.date = ticket.date
             fullTicket.price = ticket.price
             fullTicket.plane = ticket.plane.name
-            const flight = await this.flightRepository.findOne({where:{id:ticket.flight.id}, relations:{to_airport: true, from_airport: true}})
+            const flight = await this.flightRepository.findOne({ where: { id: ticket.flight.id }, relations: { to_airport: true, from_airport: true } })
             fullTicket.flight = flight.name
             fullTicket.startTime = flight.start_time
             fullTicket.endTime = flight.end_time
@@ -81,9 +81,9 @@ export class TicketService {
 
     }
 
-    async findFullOne(id: number): Promise<FullTicket>{
+    async findFullOne(id: number): Promise<FullTicket> {
         const fullTicket = new FullTicket()
-        const ticket = await this.ticketRepository.findOne({where:{id}, relations:{plane: true, flight: true, passenger: true}})
+        const ticket = await this.ticketRepository.findOne({ where: { id }, relations: { plane: true, flight: true, passenger: true } })
         fullTicket.class = ticket.class;
         fullTicket.date = ticket.date;
         fullTicket.gate = ticket.gate;
@@ -104,16 +104,16 @@ export class TicketService {
         return await this.ticketRepository.find();
     }
 
-    async userBoughtTicket(ticketId: number, data: any): Promise<Ticket>{
+    async userBoughtTicket(ticketId: number, data: any): Promise<Ticket> {
         const name = data.fullname
         const birthDate = data.birth_date
         const passport = data.passport
         const email = data.email
         const food = data.food
         const luggage = data.luggage
-        const findedPassengers = await this.passengerRepository.find({where:{fullname: name,birth_date:birthDate,passport: passport,email: email}})
+        const findedPassengers = await this.passengerRepository.find({ where: { fullname: name, birth_date: birthDate, passport: passport, email: email } })
         console.log(findedPassengers)
-        if (findedPassengers.length == 0){
+        if (findedPassengers.length == 0) {
             const newPassenger = await this.passengerRepository.create()
             newPassenger.fullname = name
             newPassenger.birth_date = birthDate
@@ -121,8 +121,8 @@ export class TicketService {
             newPassenger.email = email
             await this.passengerRepository.save(newPassenger)
         }
-        const passenger = await this.passengerRepository.findOne({where:{fullname: name,birth_date:birthDate,passport: passport,email: email}})
-        const ticket = await this.ticketRepository.findOne({where:{id:ticketId}})
+        const passenger = await this.passengerRepository.findOne({ where: { fullname: name, birth_date: birthDate, passport: passport, email: email } })
+        const ticket = await this.ticketRepository.findOne({ where: { id: ticketId } })
         ticket.passenger = passenger
         ticket.food = food
         ticket.luggage = luggage
@@ -130,19 +130,19 @@ export class TicketService {
         return ticket
     }
 
-    async findTickets(from: string, to: string, date: string): Promise<FullTicket[]>{
-        const tickets = await this.ticketRepository.find({where:{passenger:IsNull(), date:date}, relations: {flight: true, plane:true, passenger: true}})
+    async findTickets(from: string, to: string, date: string): Promise<FullTicket[]> {
+        const tickets = await this.ticketRepository.find({ where: { passenger: IsNull(), date: date }, relations: { flight: true, plane: true, passenger: true } })
         console.log(tickets)
-        const fromAiroports = await this.airportRepository.find({where: {city: from}})
-        const toAirports = await this.airportRepository.find({where:{city: to}})
-        const flights = await this.flightRepository.find({relations: {to_airport:true, from_airport:true}})
+        const fromAiroports = await this.airportRepository.find({ where: { city: from } })
+        const toAirports = await this.airportRepository.find({ where: { city: to } })
+        const flights = await this.flightRepository.find({ relations: { to_airport: true, from_airport: true } })
         let needFlights: Flight[]
         needFlights = []
-        for(const f of flights){
-            for(const fa of fromAiroports){
-                if (f.from_airport.id == fa.id){
-                    for(const ta of toAirports){
-                        if (f.to_airport.id == ta.id){
+        for (const f of flights) {
+            for (const fa of fromAiroports) {
+                if (f.from_airport.id == fa.id) {
+                    for (const ta of toAirports) {
+                        if (f.to_airport.id == ta.id) {
                             needFlights.push(f)
                         }
                     }
@@ -153,9 +153,9 @@ export class TicketService {
         console.log(needFlights)
         let needTickets: FullTicket[]
         needTickets = []
-        for(let t of tickets){
-            for(let nf of needFlights){
-                if (t.flight.id == nf.id){
+        for (let t of tickets) {
+            for (let nf of needFlights) {
+                if (t.flight.id == nf.id) {
                     const fullticket = new FullTicket()
                     fullticket.id = t.id
                     fullticket.class = t.class
@@ -181,7 +181,7 @@ export class TicketService {
     }
 
     async update(id: number, updatedTicket: Ticket) {
-        const ticket = await this.ticketRepository.findOne({where:{id}})
+        const ticket = await this.ticketRepository.findOne({ where: { id } })
         ticket.class = updatedTicket.class;
         ticket.terminal = updatedTicket.terminal;
         ticket.seat = updatedTicket.seat;
@@ -198,13 +198,13 @@ export class TicketService {
     }
 
     remove(id: number) {
-        this.ticketRepository.delete({id})
+        this.ticketRepository.delete({ id })
     }
-    
-    async generatePdf(ticketId: number): Promise<Buffer>{
-        const ticket = await this.ticketRepository.findOne({where:{id:ticketId}, relations:{passenger:true, plane: true, flight: true}})
-        const flight = await this.flightRepository.findOne({where:{id:ticket.flight.id}, relations:{to_airport: true, from_airport: true}})
-        const pdfBuffer: Buffer = await new Promise( resolve => {
+
+    async generatePdf(ticketId: number): Promise<Buffer> {
+        const ticket = await this.ticketRepository.findOne({ where: { id: ticketId }, relations: { passenger: true, plane: true, flight: true } })
+        const flight = await this.flightRepository.findOne({ where: { id: ticket.flight.id }, relations: { to_airport: true, from_airport: true } })
+        const pdfBuffer: Buffer = await new Promise(resolve => {
             const doc = new PDFDocument({
                 size: "LETTER",
                 bufferPages: true
@@ -213,15 +213,15 @@ export class TicketService {
             let birth_date = new Date(birth_string)
             let food: string = ""
             let luggage: string = ""
-            if(ticket.luggage){
+            if (ticket.luggage) {
                 luggage = "Оплачен"
-            }else{
+            } else {
                 luggage = "Отсутствует"
             }
-            if(ticket.food){
-                 food = "Предоставляется"
-            }else{
-                 food = "Отсутствует"
+            if (ticket.food) {
+                food = "Предоставляется"
+            } else {
+                food = "Отсутствует"
             }
             doc.font(`src/ofont.ru_Kanit Cyrillic.ttf`)
             doc.text("Пассажир:")
@@ -242,11 +242,11 @@ export class TicketService {
             doc.moveDown();
             doc.text(`Итоговая цена: ${ticket.price}`)
             doc.moveDown();
-            doc.text("Qr-код для оплаты:",{align: 'center'})
+            doc.text("Qr-код для оплаты:", { align: 'center' })
             doc.moveDown();
             doc.moveDown();
             doc.moveDown();
-            doc.image('src/QR-Code.png',{align: 'center'})
+            doc.image('src/QR-Code.png', { align: 'center' })
             const buffer = []
             doc.on('data', buffer.push.bind(buffer))
             doc.on('end', () => {
@@ -257,6 +257,6 @@ export class TicketService {
         })
         return pdfBuffer
     }
-    
-    
+
+
 }

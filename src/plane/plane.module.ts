@@ -15,4 +15,4 @@ import { Ticket } from 'src/ticket/ticket.entity';
     imports: [DatasourceModule, TypeOrmModule.forFeature([Plane, Ticket])]
 
 })
-export class PlaneModule {}
+export class PlaneModule { }

@@ -34,5 +34,4 @@ export class FullTicket {
     to_iata: string;
     from_city: string;
     to_city: string;
-    }
-    
+}

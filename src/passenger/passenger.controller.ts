@@ -1,5 +1,5 @@
 
-import { Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { Passenger } from './passenger.entity';
 import { PassengerService } from './passenger.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -9,7 +9,7 @@ import { ApiTags } from '@nestjs/swagger';
 @Controller('passenger')
 @ApiTags('Пассажир')
 export class PassengerController {
-    constructor(private readonly passengerService: PassengerService) {}
+    constructor(private readonly passengerService: PassengerService) { }
 
     @Get()
     findAll() {
@@ -30,7 +30,7 @@ export class PassengerController {
     create(@Body() createPassenger: Passenger) {
         return this.passengerService.create(createPassenger);
     }
-    
+
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.passengerService.remove(+id);

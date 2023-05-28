@@ -1,4 +1,4 @@
-import {Module} from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { PlaneModule } from './plane/plane.module';
 import { DatasourceModule } from './datasource/datasource.module';
 import { AirportModule } from './airport/airport.module';
@@ -29,4 +29,4 @@ import { CreateTicket } from './ticket/createTicket.dto';
     controllers: [],
     providers: [],
 })
-export class AppModule {}
+export class AppModule { }

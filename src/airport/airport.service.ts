@@ -9,7 +9,7 @@ export class AirportService {
     constructor(
         @InjectRepository(Airport)
         private readonly airportRepository: Repository<Airport>
-    ){}
+    ) { }
 
     async create(airport: Airport): Promise<Airport> {
 
@@ -23,7 +23,7 @@ export class AirportService {
 
     findOne(id: number): Promise<Airport> {
 
-        return this.airportRepository.findOne({where: {id}});
+        return this.airportRepository.findOne({ where: { id } });
     }
 
     async findAll(): Promise<Airport[]> {
@@ -33,7 +33,7 @@ export class AirportService {
 
     async update(id: number, updatedAirport: Airport) {
 
-        const airport = await this.airportRepository.findOne({where:{id}});
+        const airport = await this.airportRepository.findOne({ where: { id } });
         airport.city = updatedAirport.city
         airport.iata = updatedAirport.iata
         airport.name = updatedAirport.name
@@ -43,7 +43,7 @@ export class AirportService {
 
     remove(id: number) {
 
-        this.airportRepository.delete({id})
+        this.airportRepository.delete({ id })
     }
-    
+
 }
