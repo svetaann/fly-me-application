@@ -104,11 +104,13 @@ export class TicketService {
         return await this.ticketRepository.find();
     }
 
-    async userBoughtTicket(ticketId: number, addedPassenger: Passenger): Promise<Ticket>{
-        const name = await addedPassenger.fullname
-        const birthDate = addedPassenger.birth_date
-        const passport = addedPassenger.passport
-        const email = addedPassenger.email
+    async userBoughtTicket(ticketId: number, data: any): Promise<Ticket>{
+        const name = data.fullname
+        const birthDate = data.birth_date
+        const passport = data.passport
+        const email = data.email
+        const food = data.food
+        const luggage = data.luggage
         const findedPassengers = await this.passengerRepository.find({where:{fullname: name,birth_date:birthDate,passport: passport,email: email}})
         console.log(findedPassengers)
         if (findedPassengers.length == 0){
@@ -122,6 +124,8 @@ export class TicketService {
         const passenger = await this.passengerRepository.findOne({where:{fullname: name,birth_date:birthDate,passport: passport,email: email}})
         const ticket = await this.ticketRepository.findOne({where:{id:ticketId}})
         ticket.passenger = passenger
+        ticket.food = food
+        ticket.luggage = luggage
         await this.ticketRepository.save(ticket)
         return ticket
     }
@@ -234,13 +238,15 @@ export class TicketService {
             doc.moveDown();
             doc.text(`Прилет: ${flight.end_time}`)
             doc.moveDown();
-            doc.text(`Место: ${ticket.seat}   Класс: ${ticket.class}   Питание: ${food}   Багаж: ${luggage}`,{align: 'center'})
+            doc.text(`Место: ${ticket.seat}   Класс: ${ticket.class}   Питание: ${food}   Багаж: ${luggage}`)
             doc.moveDown();
-            doc.text("Qr-код для оплаты:")
+            doc.text(`Итоговая цена: ${ticket.price}`)
+            doc.moveDown();
+            doc.text("Qr-код для оплаты:",{align: 'center'})
             doc.moveDown();
             doc.moveDown();
             doc.moveDown();
-            doc.image('src/QR-Code.png')
+            doc.image('src/QR-Code.png',{align: 'center'})
             const buffer = []
             doc.on('data', buffer.push.bind(buffer))
             doc.on('end', () => {

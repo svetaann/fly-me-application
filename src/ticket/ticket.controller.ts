@@ -22,10 +22,11 @@ export class TicketController {
     @Get('/pdf/:ticketId')
     async generatePDF(@Res() res, @Param('ticketId') ticketId: number): Promise<void> {
         const buffer = await this.ticketService.generatePdf(ticketId);
-
+        let dateTime = new Date()
+        console.log(dateTime)
         res.set({
             'Content-Type': 'application/pdf; charset=utf-8',
-            'Content-Disposition': 'attachment; filename=example.pdf',
+            'Content-Disposition': `attachment; filename=ticket${dateTime.toISOString()}.pdf`,
             'Content-Length': buffer.length,
         })
 
@@ -62,9 +63,9 @@ export class TicketController {
     }
 
     @Post('/buy/:id')
-    userBoughtTicket(@Param('id') id: number, @Body() newPassenger: Passenger ){
-        console.log(id, newPassenger)
-        return this.ticketService.userBoughtTicket(+id, newPassenger)
+    userBoughtTicket(@Param('id') id: number, @Body() data: any ){
+        console.log(id, data)
+        return this.ticketService.userBoughtTicket(+id, data)
     }
 
     @Delete(':id')
