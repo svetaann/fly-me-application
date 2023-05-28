@@ -9,7 +9,8 @@ import { Plane } from "src/plane/plane.entity";
 import { FullTicket } from "./fullTicket.dto";
 import { Passenger } from "src/passenger/passenger.entity";
 import { Airport } from "src/airport/airport.entity";
-
+import {resolve} from 'path'
+const PDFDocument = require('pdfkit-table')
 
 @Injectable()
 export class TicketService {
@@ -196,7 +197,35 @@ export class TicketService {
         this.ticketRepository.delete({id})
     }
     
-    
+    async generatePdf(ticketId: number): Promise<Buffer>{
+        const ticket = await this.ticketRepository.findOne({where:{id:ticketId}, relations:{passenger:true, plane: true, flight: true}})
+        const flight = await this.flightRepository.findOne({where:{id:ticket.flight.id}, relations:{to_airport: true, from_airport: true}})
+        const pdfBuffer: Buffer = await new Promise( resolve => {
+            const doc = new PDFDocument({
+                size: "LETTER",
+                bufferPages: true
+            })
+            const birth_string = ticket.passenger.birth_date
+            let birth_date = new Date(birth_string)
+
+            doc.font(`src/ofont.ru_Kanit Cyrillic.ttf`)
+            doc.text("Пассажир:")
+            doc.moveDown();
+            doc.text(`ФИО: ${ticket.passenger.fullname} Дата рождения: ${(new Date(ticket.passenger.birth_date)).toLocaleDateString()} Паспорт:${ticket.passenger.passport}`)
+            doc.moveDown();
+            doc.moveDown();
+            doc.text(`${flight.from_airport.city} - ${flight.to_airport.city}`)
+
+            const buffer = []
+            doc.on('data', buffer.push.bind(buffer))
+            doc.on('end', () => {
+                const data = Buffer.concat(buffer)
+                resolve(data)
+            })
+            doc.end()
+        })
+        return pdfBuffer
+    }
     
     
 }

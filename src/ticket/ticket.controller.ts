@@ -1,11 +1,13 @@
 
-import { Body, Controller, Delete, Get, Param, Post, Put, Query} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Res} from '@nestjs/common';
 import { Ticket } from './ticket.entity';
 import { TicketService } from './ticket.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateTicket } from './createTicket.dto';
 import { Passenger } from 'src/passenger/passenger.entity';
-
+import * as fs from 'fs';
+import * as PdfPrinter from 'pdfmake';
+import * as uuid from 'uuid';
 
 
 @Controller('ticket')
@@ -16,6 +18,18 @@ export class TicketController {
     @Get()
     findAll() {
         return this.ticketService.findAll();
+    }
+    @Get('/pdf/:ticketId')
+    async generatePDF(@Res() res, @Param('ticketId') ticketId: number): Promise<void> {
+        const buffer = await this.ticketService.generatePdf(ticketId);
+
+        res.set({
+            'Content-Type': 'application/pdf; charset=utf-8',
+            'Content-Disposition': 'attachment; filename=example.pdf',
+            'Content-Length': buffer.length,
+        })
+
+        res.end(buffer);
     }
     @Get('/fullForSale')
     findFullAll_forSale(){
@@ -29,6 +43,8 @@ export class TicketController {
     findOne(@Param('id') id: string) {
         return this.ticketService.findOne(+id);
     }
+
+    
 
     @Get('/full/:id')
     findFullOne(@Param('id') id: string) {
