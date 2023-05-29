@@ -1,5 +1,4 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
-import { DatasourceService } from "src/datasource/datasource.service";
 import { Ticket } from "./ticket.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { IsNull, Repository } from "typeorm";
@@ -149,7 +148,6 @@ export class TicketService {
                 }
             }
         }
-        console.log(5)
         console.log(needFlights)
         let needTickets: FullTicket[]
         needTickets = []
@@ -224,11 +222,11 @@ export class TicketService {
                 food = "Отсутствует"
             }
             doc.font(`src/ofont.ru_Kanit Cyrillic.ttf`)
-            doc.text("Пассажир:")
+            doc.text("Пассажир:",{align: 'center'})
             doc.moveDown();
             doc.text(`ФИО: ${ticket.passenger.fullname} Дата рождения: ${(new Date(ticket.passenger.birth_date)).toLocaleDateString()} Паспорт:${ticket.passenger.passport}`)
             doc.moveDown();
-            doc.text("Информация о перелёте:")
+            doc.text("Информация о перелёте:",{align: 'center'})
             doc.moveDown();
             doc.text(`${(new Date(ticket.date)).toLocaleDateString()}`)
             doc.moveDown();

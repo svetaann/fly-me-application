@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { DatasourceModule } from 'src/datasource/datasource.module';
 import { AirportController } from './airport.controller';
 import { AirportService } from './airport.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -13,7 +12,7 @@ import { Ticket } from 'src/ticket/ticket.entity';
 
     providers: [AirportService],
 
-    imports: [DatasourceModule, TypeOrmModule.forFeature([Airport, Flight, Ticket])]
+    imports: [TypeOrmModule.forFeature([Airport, Flight, Ticket])]
 
 })
 

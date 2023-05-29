@@ -1,5 +1,4 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
-import { DatasourceService } from "src/datasource/datasource.service";
 import { Passenger } from "./passenger.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";

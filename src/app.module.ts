@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common'
 import { PlaneModule } from './plane/plane.module';
-import { DatasourceModule } from './datasource/datasource.module';
 import { AirportModule } from './airport/airport.module';
 import { PassengerModule } from './passenger/passenger.module';
 import { FlightModule } from './flight/flight.module';
@@ -14,7 +13,7 @@ import { Ticket } from './ticket/ticket.entity';
 import { CreateTicket } from './ticket/createTicket.dto';
 
 @Module({
-    imports: [PlaneModule, DatasourceModule, AirportModule, PassengerModule
+    imports: [PlaneModule, AirportModule, PassengerModule
         , FlightModule, TicketModule, TypeOrmModule.forRoot({
             type: 'postgres',
             port: 5432,

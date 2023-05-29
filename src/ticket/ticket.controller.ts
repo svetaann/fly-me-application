@@ -4,7 +4,6 @@ import { Ticket } from './ticket.entity';
 import { TicketService } from './ticket.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateTicket } from './createTicket.dto';
-import { Passenger } from 'src/passenger/passenger.entity';
 
 
 
@@ -12,7 +11,6 @@ import { Passenger } from 'src/passenger/passenger.entity';
 @ApiTags('Билет')
 export class TicketController {
     constructor(private readonly ticketService: TicketService) { }
-
     @Get()
     findAll() {
         return this.ticketService.findAll();
@@ -27,7 +25,6 @@ export class TicketController {
             'Content-Disposition': `attachment; filename=ticket${dateTime.toISOString()}.pdf`,
             'Content-Length': buffer.length,
         })
-
         res.end(buffer);
     }
     @Get('/fullForSale')
@@ -42,30 +39,23 @@ export class TicketController {
     findOne(@Param('id') id: string) {
         return this.ticketService.findOne(+id);
     }
-
-
-
     @Get('/full/:id')
     findFullOne(@Param('id') id: string) {
         return this.ticketService.findFullOne(+id);
     }
-
     @Put(':id')
     update(@Param('id') id: string, @Body() updateTicket: Ticket) {
         return this.ticketService.update(+id, updateTicket);
     }
-
     @Post()
     create(@Body() createTicket: CreateTicket) {
         return this.ticketService.create(createTicket);
     }
-
     @Post('/buy/:id')
     userBoughtTicket(@Param('id') id: number, @Body() data: any) {
         console.log(id, data)
         return this.ticketService.userBoughtTicket(+id, data)
     }
-
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.ticketService.remove(+id);

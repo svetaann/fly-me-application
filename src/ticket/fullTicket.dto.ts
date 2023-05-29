@@ -28,10 +28,16 @@ export class FullTicket {
     startTime: string;
     @ApiProperty({ example: '16:33', description: 'Время прилета' })
     endTime: string;
+    @ApiProperty({ example: 'Шереметьево', description: 'Название аэропорта отправления' })
     from_airport: string;
+    @ApiProperty({ example: 'Внуково', description: 'Название аэропорта прибытия' })
     to_airport: string;
+    @ApiProperty({ example: 'SVO', description: 'ИАТА код аэропорта отправления' })
     from_iata: string;
+    @ApiProperty({ example: 'VKO', description: 'ИАТА код аэропорта прибытия' })
     to_iata: string;
+    @ApiProperty({ example: 'Москва', description: 'Город отправления' })
     from_city: string;
+    @ApiProperty({ example: 'Уфа', description: 'Город прибытия' })
     to_city: string;
 }
